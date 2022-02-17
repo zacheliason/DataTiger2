@@ -276,73 +276,48 @@ def makeSiteDF(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict):
         ###
     return df
 
+def add_directory(outputPath, organizing_directory):
+    if not os.path.isdir(os.path.join(outputPath, organizing_directory)):
+        os.mkdir(os.path.join(outputPath, organizing_directory))
+
+    outputPath = os.path.join(outputPath, organizing_directory)
+    return outputPath
+
+def make_file_path(outputPath, siteID, nbsNum, description=None, ending='.csv'):
+    file_name = siteID if siteID != "" else nbsNum
+    if description:
+        file_name += f"_{description}"
+    file_name += ending
+
+    return os.path.join(outputPath, file_name)
+
+
 def saveDF(df, outputPath, siteId, nbsNum, saveFig=False, corrections_df=None, target_list=None, sensors=None, device=None):
-    if platform.system() == "Windows":
-        if siteID != "":
-            filePath = outputPath + "\\timeSeriesReport_" + siteId + ".csv"
-            figPath = outputPath + "\\timeSeriesCorrectionFigures\\" + siteId
-            figTitle = siteId
-        else:
-            filePath = outputPath + "\\timeSeriesReport_NBS" + nbsNum + ".csv"
-            figPath = outputPath + "\\timeSeriesCorrectionFigures_NBS\\" + nbsNum
-            figTitle = f"NBS_{nbsNum}"
-    else:
-        if siteId != "":
-            filePath = outputPath + "/timeSeriesReport_" + siteId + ".csv"
-            figPath = outputPath + "/timeSeriesCorrectionFigures/" + siteId
-            figTitle = siteId
-        else:
-            filePath = outputPath + "/timeSeriesReport_NBS" + nbsNum + ".csv"
-            figPath = outputPath + "/timeSeriesCorrectionFigures_NBS/" + nbsNum
-            figTitle = f"NBS_{nbsNum}"
+    # Adds appropriate parent organizational directories to respective paths
+    timeSeriesReportsPath = add_directory(outputPath, "timeSeriesReports")
+    figuresPath = add_directory(outputPath, "timeSeriesFigures")
+    correctionFiguresPath = add_directory(outputPath, "correctionFigures")
 
-    print(filePath)
+    # Builds path for individual files
+    filePath = make_file_path(timeSeriesReportsPath, siteId, nbsNum)
+    figPath = make_file_path(figuresPath, siteId, nbsNum, ending=".png")
+
+    # Formats datetime into date objects
+    df = format_df_datetime(df, 'datetime')
+
+    # Saves csv of dataframe
     df.to_csv(filePath, index=False)
+
+    # Output any relavent figures
     if saveFig:
-        saveFigure(corrections_df, figPath, target_list, sensors, figTitle, device)
+        plot_by_year(df, 'barometricPressure_hanna', figPath, title=siteId)
+        if target_list is not None:
+            # Saves corrected data, if that's the case
+            for target in target_list:
+                correctionFigPath = make_file_path(correctionFiguresPath, siteId, nbsNum, description=target, ending=".png")
+                saveFigure(corrections_df, correctionFigPath, target, sensors, figTitle=f"{siteId} {target}", device=device)
+                plot_by_year(corrections_df, col=f"{target}_{device}", path=correctionFigPath, title=f"{siteId} {target}", YSI=target)
 
-def saveFigure(df, figPath, target_list, sensors, figTitle, device):
-   for target in target_list:
-        try:
-            # save figure
-            plt.figure(figsize=(17, 7))
-            plt.style.use('ggplot')
-            plt.xlabel("Days since 2018")
-            plt.ylabel(f"{target}")
-            plt.scatter(df["index"], df[f"{target}_{device}"], c="grey", s=.5, zorder=1, label="raw data")
-
-
-            # for point_sensor in sensors:
-            #     if point_sensor == "Hanna":
-            #         plt.plot(df["index"], df[f"{point_sensor}_residual_{target}"], lw=1, ls="dotted", c="coral",
-            #                  zorder=1, label=f"{point_sensor} residual")
-            #         plt.plot(df["index"], df[f"{point_sensor}_corrected_{target}"], lw=.5, c="orange", zorder=1,
-            #                  label=f"{point_sensor} corrected values")
-            #         plt.scatter(df["index"], df[f"{point_sensor}_{target}_fieldsheet"], s=2, c="orangered", zorder=2,
-            #                     label=f"{point_sensor} fieldsheet values")
-            #     else:
-
-
-            # THESE ARE REAL!
-            # plt.plot(df["index"], df[f"YSI_curve_{target}"], lw=1, ls="dotted",
-            #          c="cornflowerblue", zorder=2, label=f"residual_curve_{target}")
-            # plt.plot(df["index"], df[f"residual_curve_{target}"], lw=1, c="darkcyan", zorder=3,
-            #          label=f"residual_curve_{target}")
-            # plt.plot(df["index"], df[f"{target}_{device}_corrected"], lw=1, c="indigo", zorder=4,
-            #             label=f"{target}_{device}_corrected")
-            # plt.scatter(df["index"], df[f"{target}"], s=6, c="green", zorder=4,
-            #             label=f"residual points")
-            plt.scatter(df["index"], df[f"{target}_fieldsheet"], s=6, c="tomato", zorder=4,
-                        label=f"{target}_YSI")
-            plt.axvline(x=945, c="tomato", zorder=7, label="Stopped calibrating May 3, 2021")
-            plt.title(f"{figTitle} {target}")
-            plt.legend()
-            plt.savefig(f"{figPath}_{target}.png", dpi=300)
-            plt.clf()
-            plt.close()
-        except:
-            print(traceback.format_exc())
-            print(f"PNG export for {figTitle} failed at target: {target}")
 
 def getAllHannaPressuresDF(cursor):
     indexList = getIndexList()
@@ -392,7 +367,6 @@ def getSiteCoordinateDicts(cursor):
     siteToX = {}
     siteToY = {}
     for line in result:
-
         siteID = line[3]
 
         if siteID != "":
@@ -466,7 +440,7 @@ def expandIndex(targetIndex, allIndices):
 # what is the right way to do this?
 
 # calculate a barometric pressure column that I can subtract from the pressure measurements
-# subract them
+# subtract them
 # run the standard curve
 # calculate discharge
 def getBarometricPressureColumnNoCorrections(siteID, pdf, stationToPriority):
@@ -1082,13 +1056,41 @@ def format_df_datetime(df, name_of_datetime):
     df[name_of_datetime] = df[name_of_datetime].apply(lambda x: " ".join(
         ["-".join(list(map(lambda y: y.zfill(2), x.split(" ")[0].split("-")))),
          ":".join(list(map(lambda y: y.zfill(2), x.split(" ")[1].split(":"))))]))
-    df[name_of_datetime] = pd.to_datetime(df.datetime, format='%y-%m-%d %H:%M:%S')
+    df[name_of_datetime] = pd.to_datetime(df[name_of_datetime], format='%y-%m-%d %H:%M:%S')
     return df
+
+def plot_list_df(df, list_df, outputPath, siteID):
+    figures_path = add_directory(outputPath, siteID)
+    fig_path = make_file_path(figures_path, siteID, description="segmented", ending=".png")
+
+    plt.figure(figsize=(17, 7))
+    plt.style.use('ggplot')
+    plt.ylabel("Pressure")
+    plt.xlabel("Time")
+
+    z = 0
+    for d in list_df:
+        z += 1
+        plt.plot(d["datetime"], d["pressure_hobo"], lw=.3, zorder=2, label=f"{z}")
+
+    df_filtered_by_discharge = df[~df["discharge_measured"].isna()]
+    plt.scatter(df_filtered_by_discharge["datetime"], df_filtered_by_discharge["pressure_hobo"], s=10, c='tomato', zorder=10, label="discharge measurements")
+
+    plt.text(0.95, 0.01, f'{str(len(df_filtered_by_discharge["datetime"].values.tolist()))} discharge measurements at this site.', verticalalignment='bottom', horizontalalignment='right', fontsize=15)
+
+    plt.title(f"{siteID} Segmented by Chunk of Workable Continuous Pressure Data (gaps < 3 hrs)")
+    plt.legend()
+
+    plt.savefig(fig_path, dpi=300)
+    plt.clf()
+    plt.close()
 
 def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict, outputPath, calculated_pdf):
 # def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict, outputPath):
 
     # NOTE: not all of the catchments have data going up until 2021 (this is corroborated across the usgs website)
+
+    # catchments_df = df of all the catchments
     catchments_df, sites_dict = get_usgs_discharge_sites()
 
     if optionsDict["calculateStandardCurve"] == True:
@@ -1098,31 +1100,32 @@ def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, options
     ### update testsDict (options?) to grab batch # from database, when batch numbers switch,
     df = makeSiteDF(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict)
 
-    # -------------------------------------
     # Format dates inside df into datetime objects
-    # -------------------------------------
-
     df = format_df_datetime(df, 'datetime')
 
     # -----------------------------------
     # uncomment out for faster testing
     # -----------------------------------
-
     # df = pd.read_csv("zach_df.csv")
-    df.to_csv("zach_df.csv", index=False)
+    # df.to_csv("zach_df.csv", index=False)
 
+    # Align leading/lagging ends of each batch
     if optionsDict["include_batch_id"]:
-
-
         # NORMALIZE PRESSURE HOBO
         df['pressure_hobo'] = pd.to_numeric(df['pressure_hobo'], errors='coerce')
+        # df['pressure_hobo'] = df['pressure_hobo'].replace('', np.nan)
         # df['pressure_hobo'] = (df['pressure_hobo'] - df['pressure_hobo'].mean()) / (df['pressure_hobo'].std())
 
         # following function will enforce continuity by aligning each of the beginning and lagging ends of each batch in the pressure data
         df = correct_sensor_gaps(df)
 
+    # get nearest usgs site
+    usgs_site = sites_dict[siteID]
 
-    df['pressure_hobo'] = df['pressure_hobo'].replace('', np.nan)
+    # catchments_df[usgs_site] = catchments_df[usgs_site][catchments_df[usgs_site].date > start_datetime]
+    normalized_usgs = (catchments_df[usgs_site].flows - catchments_df[usgs_site].flows.mean()) / (catchments_df[usgs_site].flows.std())
+
+
     plt.figure(figsize=(50, 7))
     plt.style.use('ggplot')
     plt.ylabel("Pressure")
@@ -1132,11 +1135,6 @@ def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, options
     groups = df.groupby('batch_id')
     for name, group in groups:
         plt.plot(group['index'], group.corrected_values, lw=.4, zorder=4, )
-
-    usgs_site = sites_dict[siteID]
-
-    # catchments_df[usgs_site] = catchments_df[usgs_site][catchments_df[usgs_site].date > start_datetime]
-    normalized_usgs = (catchments_df[usgs_site].flows - catchments_df[usgs_site].flows.mean()) / (catchments_df[usgs_site].flows.std())
 
     plt.plot(catchments_df[usgs_site]['indices'], normalized_usgs, lw=.2, c="tomato", zorder=2, label=f"{usgs_site} discharge")
     # plt.plot(df.datetime, df['pressure_hobo'], lw=.2, c="grey", zorder=2, linestyle='dotted', label=f"original values")
@@ -1164,25 +1162,7 @@ def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, options
     list_df, list_pdf, pairings = segment_df_by_continuity(df, calculated_pdf)
 
     if list_df is not None:
-        plt.figure(figsize=(17, 7))
-        plt.style.use('ggplot')
-        plt.ylabel("Pressure")
-        plt.xlabel("Time")
-
-        z = 0
-        for d in list_df:
-            z = z + 1
-            plt.plot(d["index"], d["pressure_hobo"], lw=.3, zorder=2, label=f"{z}")
-
-        df_filtered_by_discharge = df[~df["discharge_measured"].isna()]
-        plt.scatter(df_filtered_by_discharge["index"], df_filtered_by_discharge["pressure_hobo"], s=10, c='tomato', zorder=10, label="discharge measurements")
-
-        plt.text(0.95, 0.01, f'{str(len(df_filtered_by_discharge["index"].values.tolist()))} discharge measurements at this site.', verticalalignment='bottom', horizontalalignment='right', fontsize=15)
-        plt.title(f"{siteID} Segmented by Chunk of Workable Continuous Pressure Data (gaps < 3 hrs)")
-        plt.legend()
-        plt.savefig(f"{outputPath}/{siteID}/{siteID}_segmented_by_chunk.png", dpi=300)
-        plt.clf()
-        plt.close()
+        plot_list_df(list_df)
 
         for i in range(len(list_df)):
             start_date = pd.to_datetime(df.loc[(df["index"] == pairings[i][0])]['datetime'].values.tolist()[0]).strftime("%B %d, %Y")
@@ -1190,9 +1170,6 @@ def processDFStandardCurve(cursor, siteID, nbsNum, citSciNum, testsDict, options
 
             # df1, df2 = getDischargeToPressureDF(list_df[i], siteID, list_pdf[i], cursor, outputPath, start_date, end_date)
             df1, df2 = get_discharge_to_pressure(list_df[i], siteID, list_pdf[i], cursor, outputPath, start_date, end_date)
-
-
-
 
             plt.figure(figsize=(50, 7))
             plt.style.use('ggplot')
@@ -1359,6 +1336,7 @@ def processDF(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict, outputP
             saveDF(df, outputPath, siteID, nbsNum, True, corrections_df, target_list, sensors, device)
     else:
         saveDF(df, outputPath, siteID, nbsNum)
+    return df
 
 def objective(x, a, b, c, d, e, f, g, h):
     return (a * x) + (b * x ** 2) + (c * x ** 3) + (d * x ** 4) + (e * x ** 5) + (f * x ** 6) + (g * x ** 7) + h
@@ -1619,13 +1597,42 @@ def downloadTimeSeries(outputPath, testsDict, optionsDict, cursor):
         # generate the dataframe
         if optionsDict["includeSynoptic"] == True:
             df = processDF(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict, outputPath, pdf, stationToPriority)
+            print('okay')
         else:
             if siteID != "":
                 df = processDF(cursor, siteID, nbsNum, citSciNum, testsDict, optionsDict, outputPath, pdf, stationToPriority)
+                print('okay')
+
         progress_list.remove(siteID)
         print(f"{line[3] if line[3] != '' else str(nbsNum)} complete")
 
     return "successfully downloaded time series report to " + outputPath
+
+def plot_by_year(df, col, path, title, YSI=None, calibration_line=False):
+    try:
+        plt.style.use('ggplot')
+
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        plt.scatter(df['datetime'], df[col], s=.1)
+
+        # Plots YSI points on timeseries if indicated
+        if YSI:
+            plt.scatter(df["datetime"], df[f"{YSI}_fieldsheet"], s=4, c="tomato", zorder=4, label=f"{YSI} YSI")
+
+        if calibration_line:
+            plt.axvline(x=945, zorder=7, label="Stopped calibrating May 3, 2021")
+
+        plt.title(title)
+        plt.legend()
+        plt.savefig(path, dpi=300)
+
+        plt.clf()
+        plt.close()
+
+    except:
+        print(traceback.format_exc())
+        print(f"PNG export for {title} failed")
+
 
 def downloadStandardCurve(outputPath, testsDict, optionsDict, cursor):
 
@@ -1805,3 +1812,36 @@ def downloadLoggerGapsReport(outputPath, cursor, testsDict, optionsDict):
         missingDf.to_csv(filePath, index=False)
 
     return "successfully downloaded logger gaps report to " + outputPath
+
+
+# DEPRECATED
+def saveFigure(df, figPath, target, sensors, figTitle, device):
+    try:
+        # save figure
+        plt.figure(figsize=(17, 7))
+        plt.style.use('ggplot')
+        plt.xlabel("Days since 2018")
+        plt.ylabel(target)
+        plt.scatter(df["index"], df[f"{target}_{device}"], c="grey", s=.5, zorder=1, label="raw data")
+
+        # for point_sensor in sensors:
+        #     if point_sensor == "Hanna":
+        #         plt.plot(df["index"], df[f"{point_sensor}_residual_{target}"], lw=1, ls="dotted", c="coral",
+        #                  zorder=1, label=f"{point_sensor} residual")
+        #         plt.plot(df["index"], df[f"{point_sensor}_corrected_{target}"], lw=.5, c="orange", zorder=1,
+        #                  label=f"{point_sensor} corrected values")
+        #         plt.scatter(df["index"], df[f"{point_sensor}_{target}_fieldsheet"], s=2, c="orangered", zorder=2,
+        #                     label=f"{point_sensor} fieldsheet values")
+        #     else:
+
+        plt.scatter(df["index"], df[f"{target}_fieldsheet"], s=6, c="tomato", zorder=4,
+                    label=f"{target}_YSI")
+        plt.axvline(x=945, c="tomato", zorder=7, label="Stopped calibrating May 3, 2021")
+        plt.title(figTitle)
+        plt.legend()
+        plt.savefig(figPath, dpi=300)
+        plt.clf()
+        plt.close()
+    except:
+        print(traceback.format_exc())
+        print(f"PNG export for {figTitle} failed at target: {target}")

@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1974e55b-2c7a-4819-86d7-7225486f5696" name="Default Changelist" comment="add environment.yaml">
-      <change afterPath="$PROJECT_DIR$/Readers/read_smartrock.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/USGS_downloaders/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Uploaders/upload_smartrock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/LabbottDatabase.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/LabbottDatabase.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1974e55b-2c7a-4819-86d7-7225486f5696" name="Default Changelist" comment="update rating curves">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DatabaseName.txt" beforeDir="false" afterPath="$PROJECT_DIR$/DatabaseName.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py" beforeDir="false" afterPath="$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Readers/ReadHanna.py" beforeDir="false" afterPath="$PROJECT_DIR$/Readers/ReadHanna.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SenseFileOrigin.py" beforeDir="false" afterPath="$PROJECT_DIR$/SenseFileOrigin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Uploader.py" beforeDir="false" afterPath="$PROJECT_DIR$/Uploader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataTiger.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataTiger.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +58,7 @@
       <recent name="$PROJECT_DIR$/DownloadData/ResidualCorrections" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scratch">
+  <component name="RunManager" selected="Python.dataTiger">
     <configuration name="dataTiger" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="LabbottDatabase" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -184,8 +173,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.scratch" />
         <item itemvalue="Python.dataTiger" />
+        <item itemvalue="Python.scratch" />
         <item itemvalue="Python.webserver.command" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
@@ -307,7 +296,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643218135336</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="update rating curves">
+      <created>1643218304530</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1643218304530</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -330,7 +326,8 @@
     <MESSAGE value="calibration corrections" />
     <MESSAGE value="save progress" />
     <MESSAGE value="add environment.yaml" />
-    <option name="LAST_COMMIT_MESSAGE" value="add environment.yaml" />
+    <MESSAGE value="update rating curves" />
+    <option name="LAST_COMMIT_MESSAGE" value="update rating curves" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -357,12 +354,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>828</line>
+          <line>802</line>
           <option name="timeStamp" value="342" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1804</line>
+          <line>1811</line>
           <option name="timeStamp" value="351" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -467,12 +464,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1621</line>
-          <option name="timeStamp" value="630" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>775</line>
+          <line>749</line>
           <option name="timeStamp" value="685" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -482,22 +474,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>692</line>
+          <line>666</line>
           <option name="timeStamp" value="714" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>700</line>
+          <line>674</line>
           <option name="timeStamp" value="715" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>710</line>
+          <line>684</line>
           <option name="timeStamp" value="716" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>719</line>
+          <line>693</line>
           <option name="timeStamp" value="724" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -532,7 +524,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>778</line>
+          <line>752</line>
           <option name="timeStamp" value="845" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -587,22 +579,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>556</line>
+          <line>530</line>
           <option name="timeStamp" value="956" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1257</line>
+          <line>1234</line>
           <option name="timeStamp" value="960" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1058</line>
+          <line>1032</line>
           <option name="timeStamp" value="963" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1272</line>
+          <line>1249</line>
           <option name="timeStamp" value="964" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -647,7 +639,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1264</line>
+          <line>1241</line>
           <option name="timeStamp" value="1003" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -712,12 +704,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>501</line>
+          <line>475</line>
           <option name="timeStamp" value="1072" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>721</line>
+          <line>695</line>
           <option name="timeStamp" value="1073" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -742,17 +734,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1150</line>
+          <line>1148</line>
           <option name="timeStamp" value="1143" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1152</line>
+          <line>1150</line>
           <option name="timeStamp" value="1144" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1145</line>
+          <line>1143</line>
           <option name="timeStamp" value="1145" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -772,7 +764,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>755</line>
+          <line>729</line>
           <option name="timeStamp" value="1195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -782,43 +774,48 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>906</line>
+          <line>880</line>
           <option name="timeStamp" value="1240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>896</line>
+          <line>870</line>
           <option name="timeStamp" value="1241" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>841</line>
+          <line>815</line>
           <option name="timeStamp" value="1243" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>752</line>
+          <line>726</line>
           <option name="timeStamp" value="1244" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>738</line>
+          <line>712</line>
           <option name="timeStamp" value="1248" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1233</line>
+          <line>1210</line>
           <option name="timeStamp" value="1257" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
-          <line>1231</line>
+          <line>1208</line>
           <option name="timeStamp" value="1258" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="1259" />
+          <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
+          <line>1621</line>
+          <option name="timeStamp" value="1261" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/DownloadData/DownloadTimeSeries.py</url>
+          <line>1622</line>
+          <option name="timeStamp" value="1262" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
